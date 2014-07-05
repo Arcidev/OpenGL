@@ -1,4 +1,5 @@
 #include "SceneHandler.h"
+#include "ObjectHandler.h"
 
 // static member initialization
 bool SceneHandler::animate = false;
@@ -31,8 +32,19 @@ void SceneHandler::setLightning()
 // adds objects into scene
 void SceneHandler::create()
 {
+    cout << "Set scene name" << endl;
+    string name;
+    cin >> name;
+    load(name);
     //setLightning();
-    //ObjectHandler obj;
+    ObjectHandler obj;
+    for (vector<SceneObject>::iterator itr = m_scenery.begin(); itr != m_scenery.end(); itr++)
+        obj.prepareObject(itr->fileName, itr->textureName, itr->color, itr->position, itr->size, itr->rotation, itr->animate);
+}
+
+void SceneHandler::load(string sceneName)
+{
+
 }
 
 void SceneHandler::togglePolygonMode()

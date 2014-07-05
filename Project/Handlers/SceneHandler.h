@@ -1,10 +1,25 @@
 #pragma once
-#include "ObjectHandler.h"
+#include "..\ObjLoader.h"
+
+struct SceneObject
+{
+    string fileName;
+    wstring textureName;
+
+    Vector3f position, rotation;
+
+    float color[3];
+    float size;
+    bool animate;
+};
 
 class SceneHandler
 {
     private:
+        vector<SceneObject> m_scenery;
+
         void setLightning();
+        void load(string sceneName);
 
     public:
         static bool animate;

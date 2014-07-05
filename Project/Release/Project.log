@@ -1,11 +1,7 @@
-﻿  CameraHandler.cpp
-  DebugLog.cpp
-  KeybordHandler.cpp
+﻿  KeybordHandler.cpp
   MiscHandler.cpp
   ObjectHandler.cpp
-  SceneHandler.cpp
   main.cpp
-  ObjLoader.cpp
   Generating code
   Finished generating code
   Project.vcxproj -> D:\Personal\OpenGL\Release\Project.exe

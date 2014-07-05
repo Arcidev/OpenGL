@@ -1,5 +1,4 @@
 #pragma once
-#include "..\ObjLoader.h"
 
 class DebugLog
 {

@@ -1,4 +1,3 @@
-#include <math.h>
 #include "Handlers\MiscHandler.h"
 
 int main(int argc, char** argv)

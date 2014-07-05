@@ -1,4 +1,6 @@
 #include "ObjectHandler.h"
+#include "MiscHandler.h"
+#include "DebugLog.h"
 #define IL_USE_PRAGMA_LIBS
 #include "..\IL\devil_cpp_wrapper.hpp"
 
@@ -24,7 +26,7 @@ uint ObjectHandler::loadTexture(const wchar_t * filename)
     uint texId = 0;
 
     ilImage image;
-    if (!image.Load(filename))
+    if (!image.Load((char*)filename))
     {
         wcerr << "Failed to load: " << filename << endl;
         return 0;
@@ -112,12 +114,10 @@ void ObjectHandler::prepareObject(const char* fileName, bool texture, float* col
     return;
 }
 
-void ObjectHandler::prepareObject(string fileName, wstring texture, float colorRed, float colorGreen, float colorBlue,
-    float positionX, float positionY, float postitionZ, float size, float rotationX, float rotationY, float rotationZ,
-    bool animate, LightingSource lightSource)
+void ObjectHandler::prepareObject(string& fileName, wstring& texture, float* color, Vector3f& position,
+    float& size, Vector3f& rotation, bool& animate)
 {
     fileName = "Objects\\" + fileName;
-    float color[] = { colorRed, colorGreen, colorBlue };
 
     bool isTextured = false;
     ObjectProperties properties;
@@ -134,28 +134,22 @@ void ObjectHandler::prepareObject(string fileName, wstring texture, float colorR
     }
 
     properties.originalTextureID = properties.textureID;
-    properties.positionX = positionX;
-    properties.positionY = positionY;
-    properties.positionZ = postitionZ;
-
-    properties.rotationX = rotationX;
-    properties.rotationY = rotationY;
-    properties.rotationZ = rotationZ;
+    properties.position = position;
+    properties.rotation = rotation;
     
     properties.size = size;
     properties.animate = animate;
-    properties.lightSource = lightSource;
 
     prepareObject(fileName.c_str(), isTextured, color, properties);
 }
 
 void ObjectHandler::setObjectPosition(ObjectProperties& prop)
 {
-    glRotatef(prop.rotationX, 1.0f, 0.0f, 0.0f);
-    glRotatef(prop.rotationY, 0.0f, 1.0f, 0.0f);
-    glRotatef(prop.rotationZ, 0.0f, 0.0f, 1.0f);
+    glTranslatef(prop.position.x, prop.position.y, prop.position.z);
 
-    glTranslatef(prop.positionX, prop.positionY, prop.positionZ);
+    glRotatef(prop.rotation.x, 1.0f, 0.0f, 0.0f);
+    glRotatef(prop.rotation.y, 0.0f, 1.0f, 0.0f);
+    glRotatef(prop.rotation.z, 0.0f, 0.0f, 1.0f);
 }
 
 // draws objects from Display List
