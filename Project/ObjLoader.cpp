@@ -1,10 +1,8 @@
 #include "ObjLoader.h"
 
-MtlFile::MtlFile() : textureName("") { }
-
 ObjLoader::ObjLoader() : m_loadedMtl(false) 
 {
-    m_triangles.push_back(pair<MtlFile, vector<Triangle> >(MtlFile(), vector<Triangle>()));
+    m_triangles.push_back(MtlFile());
 }
 
 bool ObjLoader::Load(const char * filename)
@@ -16,7 +14,7 @@ bool ObjLoader::Load(const char * filename)
         return false;
     }
 
-    vector<Triangle>* triangles = &m_triangles.begin()->second;
+    vector<Triangle>* triangles = &m_triangles.begin()->triangles;
     string prefix;
     while (!file.fail())
     {
@@ -63,16 +61,12 @@ bool ObjLoader::Load(const char * filename)
 
             if (m_mtlMap.find(mtlName) != m_mtlMap.end())
             {
-                vector<Triangle> vecTriangles;
-                m_triangles.push_back(pair<MtlFile, vector<Triangle> >(m_mtlMap[mtlName], vecTriangles));
-                triangles = &vecTriangles;
+                MtlFile& mtl = m_mtlMap[mtlName];
+                m_triangles.push_back(mtl);
+                triangles = &mtl.triangles;
             }
             else // mtl not defined
-                triangles = &m_triangles.begin()->second;
-        }
-        else
-        {
-            // Other cases
+                triangles = &m_triangles.begin()->triangles;
         }
         file.ignore(1000, '\n');
     }

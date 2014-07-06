@@ -34,8 +34,9 @@ struct SceneObject
 
 struct MtlFile
 {
-    MtlFile();
     string textureName;
     // material properties
     // color ??
+
+    vector<Triangle> triangles;
 };
