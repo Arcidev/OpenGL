@@ -1,45 +1,28 @@
 #pragma once
 #include <fstream>
 #include <iostream>
-#include <string>
-#include <vector>
-
-using namespace std;
-
-struct Vector2f
-{
-    float x, y;
-};
-
-struct Vector3f
-{
-    float x, y, z;
-};
-
-struct Triangle
-{
-    unsigned int v0, t0, n0;
-    unsigned int v1, t1, n1;
-    unsigned int v2, t2, n2;
-};
+#include "Shared\SharedDefines.h"
 
 class ObjLoader
 {
     private:
-        vector<Vector3f> vertices;
-        vector<Vector3f> normals;
-        vector<Vector2f> textures;
-        vector<Triangle> triangles;
+        bool m_loadedMtl;
+        map<string, MtlFile> m_mtlMap;
+        vector<Vector3f> m_vertices;
+        vector<Vector3f> m_normals;
+        vector<Vector2f> m_textures;
+        vector<pair<MtlFile, vector<Triangle> > > m_triangles;
 
         void DecrementIndices(Triangle & triangle);
-
+        bool LoadMtl(string fileName);
     public:
+        ObjLoader();
         bool Load(const char * filename);
 
-        vector<Vector3f>& GetVertices() { return vertices; }
-        vector<Vector3f>& GetNormals() { return normals; }
-        vector<Vector2f>& GetTextures() { return textures; }
-        vector<Triangle>& GetTriangles() { return triangles; }
+        vector<Vector3f>& GetVertices() { return m_vertices; }
+        vector<Vector3f>& GetNormals() { return m_normals; }
+        vector<Vector2f>& GetTextures() { return m_textures; }
+        vector<pair<MtlFile, vector<Triangle> > >& GetTriangles() { return m_triangles; }
 
         void PrintLog();
 };

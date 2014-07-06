@@ -39,7 +39,7 @@ void SceneHandler::create()
     //setLightning();
     ObjectHandler obj;
     for (vector<SceneObject>::iterator itr = m_scenery.begin(); itr != m_scenery.end(); itr++)
-        obj.prepareObject(itr->fileName, itr->textureName, itr->color, itr->position, itr->size, itr->rotation, itr->animate);
+        obj.prepareObject(*itr);
 }
 
 void SceneHandler::load(string sceneName)

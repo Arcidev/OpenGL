@@ -7,10 +7,11 @@ typedef unsigned int uint;
 
 struct ObjectProperties
 {
-    Vector3f position;
-    Vector3f rotation;
-    float size;
-    bool animate;
+    ObjectProperties(SceneObject& object);
+    Vector3f& position;
+    Vector3f& rotation;
+    float& size;
+    bool& animate;
     uint textureID, originalTextureID;
 };
 
@@ -24,7 +25,6 @@ class ObjectHandler
         static bool goRight;
 
         uint loadTexture(const wchar_t * filename);
-        void prepareObject(const char* fileName, bool texture, float* color, ObjectProperties properties);
         static inline void setObjectPosition(ObjectProperties& prop);
 
     public:
@@ -32,7 +32,6 @@ class ObjectHandler
         static float positionX;
         static void drawObjects();
 
-        void prepareObject(string& fileName, wstring& textureName, float* color, Vector3f& position, float& size,
-            Vector3f& rotation, bool& animate);
+        void prepareObject(SceneObject object);
 };
 

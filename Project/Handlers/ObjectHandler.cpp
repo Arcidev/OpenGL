@@ -12,9 +12,11 @@ float ObjectHandler::violetLightScale = 0.0f;
 bool ObjectHandler::goRight = true;
 vector<pair<int, ObjectProperties> > ObjectHandler::m_objectListId;
 
+ObjectProperties::ObjectProperties(SceneObject& object) : position(object.position), rotation(object.rotation), size(object.size),
+                        animate(object.animate), textureID(0), originalTextureID(0) { }
+
 ObjectHandler::ObjectHandler()
 {
-    
     // Configure ResIL
     ilEnable(IL_ORIGIN_SET);
     ilOriginFunc(IL_ORIGIN_LOWER_LEFT);
@@ -51,96 +53,84 @@ uint ObjectHandler::loadTexture(const wchar_t * filename)
 }
 
 // prepares object from file into display list
-void ObjectHandler::prepareObject(const char* fileName, bool texture, float* color, ObjectProperties properties)
+void ObjectHandler::prepareObject(SceneObject object)
 {
-    ObjLoader obj;
-    DebugLog::write("Loading object: ");
-    DebugLog::writeLine(fileName);
+    //object.fileName = "Objects\\" + object.fileName;
 
-    if (!obj.Load(fileName))
-    {
-        cerr << fileName << " not loaded\n";
-        return;
-    }
+    //bool isTextured = false;
+    //ObjectProperties properties(object);
+    //properties.textureID = 0;
 
-    DebugLog::writeLine("  Loaded successfully");
+    ///*if (object.textureName != L"")
+    //{
+    //    object.textureName = L"Textures\\" + object.textureName;
+    //    if ((properties.textureID = loadTexture(object.textureName.c_str())))
+    //    {
+    //        glBindTexture(GL_TEXTURE_3D, properties.textureID);
+    //        isTextured = true;
+    //    }
+    //}*/
 
-    vector<Triangle> triangles = obj.GetTriangles();
-    vector<Vector2f> textures = obj.GetTextures();
-    vector<Vector3f> vertices = obj.GetVertices();
-    vector<Vector3f> normals = obj.GetNormals();
+    //properties.originalTextureID = properties.textureID;
 
-    m_objectListId.push_back(make_pair(glGenLists(1), properties));
-    glNewList(m_objectListId.back().first, GL_COMPILE);
+    //ObjLoader obj;
+    //DebugLog::write("Loading object: ");
+    //DebugLog::writeLine(object.fileName.c_str());
 
-    glColor3fv(color);
+    //if (!obj.Load(object.fileName.c_str()))
+    //{
+    //    cerr << object.fileName << " not loaded\n";
+    //    return;
+    //}
 
-    glBegin(GL_TRIANGLES);
-    for (uint i = 0; i < triangles.size(); i++)
-    {
-        if (texture && (triangles[i].t0 != -1))
-            glTexCoord2f(textures[triangles[i].t0].x,
-                textures[triangles[i].t0].y);
-        glNormal3f(normals[triangles[i].n0].x,
-            normals[triangles[i].n0].y,
-            normals[triangles[i].n0].z);
-        glVertex3f(vertices[triangles[i].v0].x,
-            vertices[triangles[i].v0].y,
-            vertices[triangles[i].v0].z);
+    //DebugLog::writeLine("  Loaded successfully");
 
-        if (texture && (triangles[i].t1 != -1))
-            glTexCoord2f(textures[triangles[i].t1].x,
-                textures[triangles[i].t1].y);
-        glNormal3f(normals[triangles[i].n1].x,
-            normals[triangles[i].n1].y,
-            normals[triangles[i].n1].z);
-        glVertex3f(vertices[triangles[i].v1].x,
-            vertices[triangles[i].v1].y,
-            vertices[triangles[i].v1].z);
+    //vector<Triangle> triangles = obj.GetTriangles();
+    //vector<Vector2f> textures = obj.GetTextures();
+    //vector<Vector3f> vertices = obj.GetVertices();
+    //vector<Vector3f> normals = obj.GetNormals();
 
-        
-        if (texture && (triangles[i].t2 != -1))
-            glTexCoord2f(textures[triangles[i].t2].x,
-                textures[triangles[i].t2].y);
-        glNormal3f(normals[triangles[i].n2].x,
-            normals[triangles[i].n2].y,
-            normals[triangles[i].n2].z);
-        glVertex3f(vertices[triangles[i].v2].x,
-            vertices[triangles[i].v2].y,
-            vertices[triangles[i].v2].z);
-    }
-    glEnd();
-    glEndList();
-    return;
-}
+    //m_objectListId.push_back(make_pair(glGenLists(1), properties));
+    //glNewList(m_objectListId.back().first, GL_COMPILE);
 
-void ObjectHandler::prepareObject(string& fileName, wstring& texture, float* color, Vector3f& position,
-    float& size, Vector3f& rotation, bool& animate)
-{
-    fileName = "Objects\\" + fileName;
+    //glColor3fv(object.color);
 
-    bool isTextured = false;
-    ObjectProperties properties;
-    properties.textureID = 0;
+    //glBegin(GL_TRIANGLES);
+    //for (uint i = 0; i < triangles.size(); i++)
+    //{
+    //    /*if (texture && (triangles[i].t0 != -1))
+    //        glTexCoord2f(textures[triangles[i].t0].x,
+    //        textures[triangles[i].t0].y);
+    //    glNormal3f(normals[triangles[i].n0].x,
+    //        normals[triangles[i].n0].y,
+    //        normals[triangles[i].n0].z);
+    //    glVertex3f(vertices[triangles[i].v0].x,
+    //        vertices[triangles[i].v0].y,
+    //        vertices[triangles[i].v0].z);
 
-    if (texture != L"")
-    {
-        texture = L"Textures\\" + texture;
-        if ((properties.textureID = loadTexture(texture.c_str())))
-        {
-            glBindTexture(GL_TEXTURE_3D, properties.textureID);
-            isTextured = true;
-        }
-    }
+    //    if (texture && (triangles[i].t1 != -1))
+    //        glTexCoord2f(textures[triangles[i].t1].x,
+    //        textures[triangles[i].t1].y);
+    //    glNormal3f(normals[triangles[i].n1].x,
+    //        normals[triangles[i].n1].y,
+    //        normals[triangles[i].n1].z);
+    //    glVertex3f(vertices[triangles[i].v1].x,
+    //        vertices[triangles[i].v1].y,
+    //        vertices[triangles[i].v1].z);
 
-    properties.originalTextureID = properties.textureID;
-    properties.position = position;
-    properties.rotation = rotation;
-    
-    properties.size = size;
-    properties.animate = animate;
 
-    prepareObject(fileName.c_str(), isTextured, color, properties);
+    //    if (texture && (triangles[i].t2 != -1))
+    //        glTexCoord2f(textures[triangles[i].t2].x,
+    //        textures[triangles[i].t2].y);
+    //    glNormal3f(normals[triangles[i].n2].x,
+    //        normals[triangles[i].n2].y,
+    //        normals[triangles[i].n2].z);
+    //    glVertex3f(vertices[triangles[i].v2].x,
+    //        vertices[triangles[i].v2].y,
+    //        vertices[triangles[i].v2].z);*/
+    //}
+    //glEnd();
+    //glEndList();
 }
 
 void ObjectHandler::setObjectPosition(ObjectProperties& prop)

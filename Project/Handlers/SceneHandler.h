@@ -1,17 +1,5 @@
 #pragma once
-#include "..\ObjLoader.h"
-
-struct SceneObject
-{
-    string fileName;
-    wstring textureName;
-
-    Vector3f position, rotation;
-
-    float color[3];
-    float size;
-    bool animate;
-};
+#include "..\Shared\SharedDefines.h"
 
 class SceneHandler
 {

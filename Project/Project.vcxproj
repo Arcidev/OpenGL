@@ -71,6 +71,7 @@
     <ClInclude Include="Handlers\ObjectHandler.h" />
     <ClInclude Include="Handlers\SceneHandler.h" />
     <ClInclude Include="ObjLoader.h" />
+    <ClInclude Include="Shared\SharedDefines.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Handlers\CameraHandler.cpp" />
