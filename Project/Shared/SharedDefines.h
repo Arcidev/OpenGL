@@ -4,6 +4,7 @@
 #include <map>
 
 using namespace std;
+typedef unsigned int uint;
 
 struct Vector2f
 {
@@ -32,7 +33,7 @@ struct SceneObject
     bool animate;
 };
 
-struct MtlFile
+struct Mtl
 {
     string textureName;
     // material properties

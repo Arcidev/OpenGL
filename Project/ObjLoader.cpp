@@ -2,7 +2,7 @@
 
 ObjLoader::ObjLoader() : m_loadedMtl(false) 
 {
-    m_triangles.push_back(MtlFile());
+    m_mtlMap.insert(pair<string, Mtl>(MTL_NOT_DEFINED, Mtl()));
 }
 
 bool ObjLoader::Load(const char * filename)
@@ -14,7 +14,7 @@ bool ObjLoader::Load(const char * filename)
         return false;
     }
 
-    vector<Triangle>* triangles = &m_triangles.begin()->triangles;
+    vector<Triangle>* triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
     string prefix;
     while (!file.fail())
     {
@@ -60,13 +60,9 @@ bool ObjLoader::Load(const char * filename)
             file >> mtlName;
 
             if (m_mtlMap.find(mtlName) != m_mtlMap.end())
-            {
-                MtlFile& mtl = m_mtlMap[mtlName];
-                m_triangles.push_back(mtl);
-                triangles = &mtl.triangles;
-            }
+                triangles = &m_mtlMap[mtlName].triangles;
             else // mtl not defined
-                triangles = &m_triangles.begin()->triangles;
+                triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
         }
         file.ignore(1000, '\n');
     }
@@ -96,5 +92,11 @@ void ObjLoader::PrintLog()
 {
     cout << "Vertices: " << m_vertices.size() << endl;
     cout << "Normals: " << m_normals.size() << endl;
-    cout << "Triangles: " << m_triangles.size() << endl;
+
+    uint trianglesSize = 0;
+    for (map<string, Mtl>::const_iterator itr = m_mtlMap.begin(); itr != m_mtlMap.end(); itr++)
+        trianglesSize += itr->second.triangles.size();
+
+    cout << "Triangles: " << trianglesSize << endl;
+    cout << "Mtl Properties: " << m_mtlMap.size() << endl;
 }

@@ -3,8 +3,6 @@
 #include "..\GL\glext.h"
 #include "..\ObjLoader.h"
 
-typedef unsigned int uint;
-
 struct ObjectProperties
 {
     ObjectProperties(SceneObject& object);
