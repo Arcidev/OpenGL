@@ -64,6 +64,7 @@ bool ObjLoader::Load(const char * filename)
             else // mtl not defined
                 triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
         }
+
         file.ignore(1000, '\n');
     }
 
@@ -80,12 +81,43 @@ void ObjLoader::DecrementIndices(Triangle & triangle)
 
 bool ObjLoader::LoadMtl(string name)
 {
-    ifstream file(name);
+    ifstream file("Objects\\" + name);
     if (!file.is_open())
     {
         cout << "MTL file " << name << " not found" << endl;
         return false;
     }
+
+    string prefix;
+    string mtlName;
+
+    while (!file.fail())
+    {
+        file >> prefix;
+        if (prefix == "newmtl")
+        {            
+            file >> mtlName;
+            m_mtlMap.insert(pair<string, Mtl>(mtlName, Mtl()));
+        }
+        else if ((prefix == "map_Ka") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].ambientTexture;
+        else if ((prefix == "map_Kd") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].diffuseTexture;
+        else if ((prefix == "map_d") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].alphaTexture;
+        else if ((prefix == "map_bump") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].bumpMap;
+        else if ((prefix == "Ka") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].ambientColor.x >> m_mtlMap[mtlName].ambientColor.y >> m_mtlMap[mtlName].ambientColor.z;
+        else if ((prefix == "Kd") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].diffuseColor.x >> m_mtlMap[mtlName].diffuseColor.y >> m_mtlMap[mtlName].diffuseColor.z;
+        else if ((prefix == "Ks") && (mtlName != ""))
+            file >> m_mtlMap[mtlName].specularColor.x >> m_mtlMap[mtlName].specularColor.y >> m_mtlMap[mtlName].specularColor.z;
+        file.ignore(1000, '\n');
+    }
+
+    file.close();
+    return true;
 }
 
 void ObjLoader::PrintLog()

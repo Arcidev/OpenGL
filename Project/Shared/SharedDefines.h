@@ -35,9 +35,18 @@ struct SceneObject
 
 struct Mtl
 {
-    string textureName;
-    // material properties
-    // color ??
+    string ambientTexture; // map_Ka
+    string diffuseTexture; // map_Kd
+    //string specularTexture; // map_Ks
+    //string specularHighLightComponent; // map_Ns
+    string alphaTexture; // map_d
+    string bumpMap; // map_bump || bump
+    //string displacementMap; // disp
+    //string stencilDecalMap; // decal
+    Vector3f ambientColor; // Ka
+    Vector3f diffuseColor; // Kd
+    Vector3f specularColor; // Ks
+    //float transparency; // Tr
 
     vector<Triangle> triangles;
 };
