@@ -1,8 +1,35 @@
 #include "ObjLoader.h"
 
+ParserPropertyMap const ObjLoader::parserPropertyMap =
+{
+    { "map_Ka", AMBIENT_TEXTURE },
+    { "map_Kd", DIFFUSE_TEXTURE },
+    { "map_d", ALPHA_TEXTURE },
+    { "map_bump", BUMP_MAP },
+
+    { "Ka", AMBIENT_COLOR },
+    { "Kd", DIFFUSE_COLOR },
+    { "Ks", SPECULAR_COLOR },
+
+    { "newmtl", NEW_MTL },
+    { "usemtl", USE_MTL },
+    { "mtllib", SET_MTL_LIB },
+
+    { "v", VERTEX_POSITION },
+    { "vt", TEXTURE_POSITION },
+    { "vn", NORMAL_POSITION },
+    { "f", TRIANGLE_VALUE }
+};
+
 ObjLoader::ObjLoader() : m_loadedMtl(false) 
 {
     m_mtlMap.insert(pair<string, Mtl>(MTL_NOT_DEFINED, Mtl()));
+}
+
+ParserProperty ObjLoader::GetParserProperty(string const& prop) const
+{
+    ParserPropertyMap::const_iterator iter = parserPropertyMap.find(prop);
+    return (iter == parserPropertyMap.end()) ? PROPERTY_NOT_DEFINED : iter->second;
 }
 
 bool ObjLoader::Load(const char * filename)
@@ -15,54 +42,55 @@ bool ObjLoader::Load(const char * filename)
     }
 
     vector<Triangle>* triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
+    Vector3f vec3;
+    Vector2f vec2;
+    Triangle triangle;
+    char slash;
     string prefix;
+    string str;
+
     while (!file.fail())
     {
         file >> prefix;
 
-        if (prefix == "v")
+        switch (GetParserProperty(prefix))
         {
-            Vector3f v;
-            file >> v.x >> v.y >> v.z;
-            m_vertices.push_back(v);
-        }
-        else if (prefix == "vt")
-        {
-            Vector2f vt;
-            file >> vt.x >> vt.y;
-            m_textures.push_back(vt);
-        }
-        else if (prefix == "vn")
-        {
-            Vector3f vn;
-            file >> vn.x >> vn.y >> vn.z;
-            m_normals.push_back(vn);
-        }
-        else if (prefix == "f")
-        {
-            Triangle t;
-            char slash;
-            file >> t.v0 >> slash >> t.t0 >> slash >> t.n0;
-            file >> t.v1 >> slash >> t.t1 >> slash >> t.n1;
-            file >> t.v2 >> slash >> t.t2 >> slash >> t.n2;
-            DecrementIndices(t);
-            triangles->push_back(t);
-        }
-        else if ((prefix == "mtllib") && !m_loadedMtl)
-        {
-            string mtllib;
-            file >> mtllib;
-            m_loadedMtl = LoadMtl(mtllib);
-        }
-        else if ((prefix == "usemtl") && m_loadedMtl)
-        {
-            string mtlName;
-            file >> mtlName;
+            case VERTEX_POSITION:
+                file >> vec3.x >> vec3.y >> vec3.z;
+                m_vertices.push_back(vec3);
+                break;
+            case TEXTURE_POSITION:
+                file >> vec2.x >> vec2.y;
+                m_textures.push_back(vec2);
+                break;
+            case NORMAL_POSITION:
+                file >> vec3.x >> vec3.y >> vec3.z;
+                m_normals.push_back(vec3);
+                break;
+            case TRIANGLE_VALUE:
+                file >> triangle.v0 >> slash >> triangle.t0 >> slash >> triangle.n0;
+                file >> triangle.v1 >> slash >> triangle.t1 >> slash >> triangle.n1;
+                file >> triangle.v2 >> slash >> triangle.t2 >> slash >> triangle.n2;
+                DecrementIndices(triangle);
+                triangles->push_back(triangle);
+                break;
+            case SET_MTL_LIB:
+                file >> str;
+                m_loadedMtl = LoadMtl(str);
+                break;
+            case USE_MTL:
+                if (m_loadedMtl)
+                {
+                    file >> str;
 
-            if (m_mtlMap.find(mtlName) != m_mtlMap.end())
-                triangles = &m_mtlMap[mtlName].triangles;
-            else // mtl not defined
-                triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
+                    if (m_mtlMap.find(str) != m_mtlMap.end())
+                        triangles = &m_mtlMap[str].triangles;
+                    else // mtl not defined
+                        triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
+                }
+                break;
+            default:
+                break;
         }
 
         file.ignore(1000, '\n');
@@ -90,29 +118,46 @@ bool ObjLoader::LoadMtl(string name)
 
     string prefix;
     string mtlName;
+    Vector3f* _colorVector;
 
     while (!file.fail())
     {
         file >> prefix;
-        if (prefix == "newmtl")
-        {            
-            file >> mtlName;
-            m_mtlMap.insert(pair<string, Mtl>(mtlName, Mtl()));
+
+        switch (GetParserProperty(prefix))
+        {
+            case NEW_MTL:
+                file >> mtlName;
+                m_mtlMap.insert(pair<string, Mtl>(mtlName, Mtl()));
+                break;
+            case AMBIENT_TEXTURE:
+                file >> m_mtlMap[mtlName].ambientTexture;
+                break;
+            case DIFFUSE_TEXTURE:
+                file >> m_mtlMap[mtlName].diffuseTexture;
+                break;
+            case ALPHA_TEXTURE:
+                file >> m_mtlMap[mtlName].alphaTexture;
+                break;
+            case BUMP_MAP:
+                file >> m_mtlMap[mtlName].bumpMap;
+                break;
+            case AMBIENT_COLOR:
+                _colorVector = &m_mtlMap[mtlName].ambientColor;
+                file >> _colorVector->x >> _colorVector->y >> _colorVector->z;
+                break;
+            case DIFFUSE_COLOR:
+                _colorVector = &m_mtlMap[mtlName].diffuseColor;
+                file >> _colorVector->x >> _colorVector->y >> _colorVector->z;
+                break;
+            case SPECULAR_COLOR:
+                _colorVector = &m_mtlMap[mtlName].specularColor;
+                file >> _colorVector->x >> _colorVector->y >> _colorVector->z;
+                break;
+            default:
+                break;
         }
-        else if ((prefix == "map_Ka") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].ambientTexture;
-        else if ((prefix == "map_Kd") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].diffuseTexture;
-        else if ((prefix == "map_d") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].alphaTexture;
-        else if ((prefix == "map_bump") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].bumpMap;
-        else if ((prefix == "Ka") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].ambientColor.x >> m_mtlMap[mtlName].ambientColor.y >> m_mtlMap[mtlName].ambientColor.z;
-        else if ((prefix == "Kd") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].diffuseColor.x >> m_mtlMap[mtlName].diffuseColor.y >> m_mtlMap[mtlName].diffuseColor.z;
-        else if ((prefix == "Ks") && (mtlName != ""))
-            file >> m_mtlMap[mtlName].specularColor.x >> m_mtlMap[mtlName].specularColor.y >> m_mtlMap[mtlName].specularColor.z;
+
         file.ignore(1000, '\n');
     }
 

@@ -9,8 +9,8 @@ int main(int argc, char** argv)
     misc.initializeWindow();
     misc.registerCallbacks();
 
-    SceneHandler scene;
-    scene.create();
+    //SceneHandler scene;
+    //scene.create();
 
     // Main loop
     glutMainLoop();

@@ -32,21 +32,3 @@ struct SceneObject
     float size;
     bool animate;
 };
-
-struct Mtl
-{
-    string ambientTexture; // map_Ka
-    string diffuseTexture; // map_Kd
-    //string specularTexture; // map_Ks
-    //string specularHighLightComponent; // map_Ns
-    string alphaTexture; // map_d
-    string bumpMap; // map_bump || bump
-    //string displacementMap; // disp
-    //string stencilDecalMap; // decal
-    Vector3f ambientColor; // Ka
-    Vector3f diffuseColor; // Kd
-    Vector3f specularColor; // Ks
-    //float transparency; // Tr
-
-    vector<Triangle> triangles;
-};
