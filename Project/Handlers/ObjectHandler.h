@@ -24,7 +24,7 @@ class ObjectHandler
 
         uint loadTexture(const wchar_t * filename);
         static inline void setObjectPosition(ObjectProperties& prop);
-
+        static void setSize(float& size) { glScalef(size, size, size); }
     public:
         ObjectHandler();
         static float positionX;

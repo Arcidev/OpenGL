@@ -45,17 +45,16 @@ void SceneHandler::create()
     ObjectHandler obj;
     SceneObject scene;
     scene.fileName = "Rayne.obj";
-    scene.size = 100.0f;
+    scene.size = 15.0f;
     scene.rotation = { -90.0f, 0.0f, 0.0f };
     scene.position = { 0.0f, 0.0f, 0.0f };
     obj.prepareObject(scene);
 
-    scene.fileName = "blooddragon.obj";
+    scene.fileName = "Battlelord.obj";
     scene.rotation = { 0.0f, 0.0f, 0.0f };
-    scene.position = { -5.0f, 0.0f, 0.0f };
+    scene.position = { 10.0f, 0.0f, 0.0f };
     scene.size = 1.0f;
     obj.prepareObject(scene);
-
     //for (vector<SceneObject>::iterator itr = m_scenery.begin(); itr != m_scenery.end(); itr++)
         //obj.prepareObject(*itr);
 

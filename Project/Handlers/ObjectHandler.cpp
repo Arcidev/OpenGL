@@ -149,15 +149,19 @@ void ObjectHandler::setObjectPosition(ObjectProperties& prop)
 // draws objects from Display List
 void ObjectHandler::drawObjects()
 {
+    ObjectProperties* prop;
     for (uint i = 0; i < m_objectListId.size(); i++)
     {
         glPushMatrix();
-        setObjectPosition(m_objectListId[i].second);
+
+        prop = &m_objectListId[i].second;
+        setObjectPosition(*prop);
+        setSize(prop->size);
 
         if (m_objectListId[i].second.textureID > 0)
         {
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, m_objectListId[i].second.textureID);
+            glBindTexture(GL_TEXTURE_2D, prop->textureID);
 
             glCallList(m_objectListId[i].first);
 
