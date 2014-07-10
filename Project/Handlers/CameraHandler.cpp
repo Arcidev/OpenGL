@@ -39,8 +39,6 @@ void CameraHandler::relocate()
     gluLookAt(m_cameraX, m_cameraY, m_cameraZ,
         m_cameraX, m_cameraY, m_cameraZ - 5,
         0, 1, 0);
-
-    std::cout << m_cameraX << " " << m_cameraY << " " << m_cameraZ << std::endl;
 }
 
 void CameraHandler::reset()

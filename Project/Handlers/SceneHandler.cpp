@@ -32,6 +32,7 @@ void SceneHandler::setLightning()
 // adds objects into scene
 void SceneHandler::create()
 {
+    time_t timer = time(NULL);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
@@ -57,6 +58,8 @@ void SceneHandler::create()
 
     //for (vector<SceneObject>::iterator itr = m_scenery.begin(); itr != m_scenery.end(); itr++)
         //obj.prepareObject(*itr);
+
+    cout << "Scene loaded in " << difftime(time(NULL), timer) << "sec" << endl;
 }
 
 void SceneHandler::load(string sceneName)
