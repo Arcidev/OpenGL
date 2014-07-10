@@ -55,82 +55,86 @@ uint ObjectHandler::loadTexture(const wchar_t * filename)
 // prepares object from file into display list
 void ObjectHandler::prepareObject(SceneObject object)
 {
-    //object.fileName = "Objects\\" + object.fileName;
+    object.fileName = "Objects\\" + object.fileName;
 
-    //bool isTextured = false;
-    //ObjectProperties properties(object);
-    //properties.textureID = 0;
+    ObjectProperties properties(object);
 
-    ///*if (object.textureName != L"")
-    //{
-    //    object.textureName = L"Textures\\" + object.textureName;
-    //    if ((properties.textureID = loadTexture(object.textureName.c_str())))
-    //    {
-    //        glBindTexture(GL_TEXTURE_3D, properties.textureID);
-    //        isTextured = true;
-    //    }
-    //}*/
+    ObjLoader obj;
+    DebugLog::write("Loading object: ");
+    DebugLog::writeLine(object.fileName.c_str());
 
-    //properties.originalTextureID = properties.textureID;
+    if (!obj.Load(object.fileName.c_str()))
+    {
+        cerr << object.fileName << " not loaded\n";
+        return;
+    }
 
-    //ObjLoader obj;
-    //DebugLog::write("Loading object: ");
-    //DebugLog::writeLine(object.fileName.c_str());
+    DebugLog::writeLine("\tLoaded successfully");
 
-    //if (!obj.Load(object.fileName.c_str()))
-    //{
-    //    cerr << object.fileName << " not loaded\n";
-    //    return;
-    //}
+    vector<Vector2f> textures = obj.GetTextures();
+    vector<Vector3f> vertices = obj.GetVertices();
+    vector<Vector3f> normals = obj.GetNormals();
+    MTLMap mtlMap = obj.GetMtlMap();
+    Mtl const* mtl;
 
-    //DebugLog::writeLine("  Loaded successfully");
+    for (MTLMap::const_iterator itr = mtlMap.begin(); itr != mtlMap.end(); itr++)
+    {
+        mtl = &itr->second;
+        if (mtl->triangles.size() == 0)
+            continue;
 
-    //vector<Triangle> triangles = obj.GetTriangles();
-    //vector<Vector2f> textures = obj.GetTextures();
-    //vector<Vector3f> vertices = obj.GetVertices();
-    //vector<Vector3f> normals = obj.GetNormals();
+        bool texture = false;
+        if (mtl->ambientTexture != "")
+        {
+            wstring wstr = L"Objects\\" + wstring(mtl->ambientTexture.begin(), mtl->ambientTexture.end());
+            if ((properties.textureID = loadTexture(wstr.c_str())))
+            {
+                texture = true;
+                properties.originalTextureID = properties.textureID;
+            }
+        }
+        
+        m_objectListId.push_back(make_pair(glGenLists(1), properties));
+        glNewList(m_objectListId.back().first, GL_COMPILE);
+        //glColor3fv(object.color);
 
-    //m_objectListId.push_back(make_pair(glGenLists(1), properties));
-    //glNewList(m_objectListId.back().first, GL_COMPILE);
+        glBegin(GL_TRIANGLES);
+        for (uint i = 0; i < mtl->triangles.size(); i++)
+        {
+            if (texture && (mtl->triangles[i].t0 != -1))
+                glTexCoord2f(textures[mtl->triangles[i].t0].x,
+                textures[mtl->triangles[i].t0].y);
+            glNormal3f(normals[mtl->triangles[i].n0].x,
+                normals[mtl->triangles[i].n0].y,
+                normals[mtl->triangles[i].n0].z);
+            glVertex3f(vertices[mtl->triangles[i].v0].x,
+                vertices[mtl->triangles[i].v0].y,
+                vertices[mtl->triangles[i].v0].z);
 
-    //glColor3fv(object.color);
-
-    //glBegin(GL_TRIANGLES);
-    //for (uint i = 0; i < triangles.size(); i++)
-    //{
-    //    /*if (texture && (triangles[i].t0 != -1))
-    //        glTexCoord2f(textures[triangles[i].t0].x,
-    //        textures[triangles[i].t0].y);
-    //    glNormal3f(normals[triangles[i].n0].x,
-    //        normals[triangles[i].n0].y,
-    //        normals[triangles[i].n0].z);
-    //    glVertex3f(vertices[triangles[i].v0].x,
-    //        vertices[triangles[i].v0].y,
-    //        vertices[triangles[i].v0].z);
-
-    //    if (texture && (triangles[i].t1 != -1))
-    //        glTexCoord2f(textures[triangles[i].t1].x,
-    //        textures[triangles[i].t1].y);
-    //    glNormal3f(normals[triangles[i].n1].x,
-    //        normals[triangles[i].n1].y,
-    //        normals[triangles[i].n1].z);
-    //    glVertex3f(vertices[triangles[i].v1].x,
-    //        vertices[triangles[i].v1].y,
-    //        vertices[triangles[i].v1].z);
+            if (texture && (mtl->triangles[i].t1 != -1))
+                glTexCoord2f(textures[mtl->triangles[i].t1].x,
+                textures[mtl->triangles[i].t1].y);
+            glNormal3f(normals[mtl->triangles[i].n1].x,
+                normals[mtl->triangles[i].n1].y,
+                normals[mtl->triangles[i].n1].z);
+            glVertex3f(vertices[mtl->triangles[i].v1].x,
+                vertices[mtl->triangles[i].v1].y,
+                vertices[mtl->triangles[i].v1].z);
 
 
-    //    if (texture && (triangles[i].t2 != -1))
-    //        glTexCoord2f(textures[triangles[i].t2].x,
-    //        textures[triangles[i].t2].y);
-    //    glNormal3f(normals[triangles[i].n2].x,
-    //        normals[triangles[i].n2].y,
-    //        normals[triangles[i].n2].z);
-    //    glVertex3f(vertices[triangles[i].v2].x,
-    //        vertices[triangles[i].v2].y,
-    //        vertices[triangles[i].v2].z);*/
-    //}
-    //glEnd();
-    //glEndList();
+            if (texture && (mtl->triangles[i].t2 != -1))
+                glTexCoord2f(textures[mtl->triangles[i].t2].x,
+                textures[mtl->triangles[i].t2].y);
+            glNormal3f(normals[mtl->triangles[i].n2].x,
+                normals[mtl->triangles[i].n2].y,
+                normals[mtl->triangles[i].n2].z);
+            glVertex3f(vertices[mtl->triangles[i].v2].x,
+                vertices[mtl->triangles[i].v2].y,
+                vertices[mtl->triangles[i].v2].z);
+        }
+        glEnd();
+        glEndList();
+    }
 }
 
 void ObjectHandler::setObjectPosition(ObjectProperties& prop)
@@ -145,5 +149,25 @@ void ObjectHandler::setObjectPosition(ObjectProperties& prop)
 // draws objects from Display List
 void ObjectHandler::drawObjects()
 {
-    
+    for (uint i = 0; i < m_objectListId.size(); i++)
+    {
+        glPushMatrix();
+        setObjectPosition(m_objectListId[i].second);
+
+        if (m_objectListId[i].second.textureID > 0)
+        {
+            glEnable(GL_TEXTURE_2D);
+            glBindTexture(GL_TEXTURE_2D, m_objectListId[i].second.textureID);
+
+            glCallList(m_objectListId[i].first);
+
+            glBindTexture(GL_TEXTURE_2D, 0);
+            glDisable(GL_TEXTURE_2D);
+        }
+        else
+            glCallList(m_objectListId[i].first);
+
+        glPopMatrix();
+    }
+
 }

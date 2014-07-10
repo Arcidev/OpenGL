@@ -23,7 +23,7 @@ ParserPropertyMap const ObjLoader::parserPropertyMap =
 
 ObjLoader::ObjLoader() : m_loadedMtl(false) 
 {
-    m_mtlMap.insert(pair<string, Mtl>(MTL_NOT_DEFINED, Mtl()));
+    m_mtlMap.insert(make_pair(MTL_NOT_DEFINED, Mtl()));
 }
 
 ParserProperty ObjLoader::GetParserProperty(string const& prop) const

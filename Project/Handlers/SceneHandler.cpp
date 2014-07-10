@@ -32,14 +32,31 @@ void SceneHandler::setLightning()
 // adds objects into scene
 void SceneHandler::create()
 {
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_LIGHT0);
     cout << "Set scene name" << endl;
-    string name;
-    cin >> name;
-    load(name);
+    //string name;
+    //cin >> name;
+    //load(name);
     //setLightning();
     ObjectHandler obj;
-    for (vector<SceneObject>::iterator itr = m_scenery.begin(); itr != m_scenery.end(); itr++)
-        obj.prepareObject(*itr);
+    SceneObject scene;
+    scene.fileName = "Rayne.obj";
+    scene.size = 100.0f;
+    scene.rotation = { -90.0f, 0.0f, 0.0f };
+    scene.position = { 0.0f, 0.0f, 0.0f };
+    obj.prepareObject(scene);
+
+    scene.fileName = "blooddragon.obj";
+    scene.rotation = { 0.0f, 0.0f, 0.0f };
+    scene.position = { -5.0f, 0.0f, 0.0f };
+    scene.size = 1.0f;
+    obj.prepareObject(scene);
+
+    //for (vector<SceneObject>::iterator itr = m_scenery.begin(); itr != m_scenery.end(); itr++)
+        //obj.prepareObject(*itr);
 }
 
 void SceneHandler::load(string sceneName)

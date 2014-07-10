@@ -52,6 +52,8 @@ struct Mtl
     vector<Triangle> triangles;
 };
 
+typedef map<string, Mtl> MTLMap;
+
 class ObjLoader
 {
     private:
@@ -72,7 +74,7 @@ class ObjLoader
         vector<Vector3f>& GetVertices() { return m_vertices; }
         vector<Vector3f>& GetNormals() { return m_normals; }
         vector<Vector2f>& GetTextures() { return m_textures; }
-        map<string, Mtl>& GetMtlMap() { return m_mtlMap; }
+        MTLMap& GetMtlMap() { return m_mtlMap; }
 
         void PrintLog();
 };

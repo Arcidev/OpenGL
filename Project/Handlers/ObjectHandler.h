@@ -6,10 +6,10 @@
 struct ObjectProperties
 {
     ObjectProperties(SceneObject& object);
-    Vector3f& position;
-    Vector3f& rotation;
-    float& size;
-    bool& animate;
+    Vector3f position;
+    Vector3f rotation;
+    float size;
+    bool animate;
     uint textureID, originalTextureID;
 };
 

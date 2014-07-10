@@ -2,8 +2,8 @@
 #include <iostream>
 // static member initialization
 float CameraHandler::m_cameraX = 0.0f;
-float CameraHandler::m_cameraY = 100.0f;
-float CameraHandler::m_cameraZ = 150.0f;
+float CameraHandler::m_cameraY = 5.0f;
+float CameraHandler::m_cameraZ = 20.0f;
 
 // handle key pressed
 void CameraHandler::onKeyPressed(unsigned char key)
@@ -39,11 +39,13 @@ void CameraHandler::relocate()
     gluLookAt(m_cameraX, m_cameraY, m_cameraZ,
         m_cameraX, m_cameraY, m_cameraZ - 5,
         0, 1, 0);
+
+    std::cout << m_cameraX << " " << m_cameraY << " " << m_cameraZ << std::endl;
 }
 
 void CameraHandler::reset()
 {
     m_cameraX = 0.0f;
-    m_cameraY = 100.0f;
-    m_cameraZ = 150.0f;
+    m_cameraY = 5.0f;
+    m_cameraZ = 20.0f;
 }

@@ -30,10 +30,10 @@ void MiscHandler::render()
     glRotatef(SceneHandler::rotationX, 1.0f, 0.0f, 0.0f);
     glRotatef(SceneHandler::rotationY, 0.0f, 1.0f, 0.0f);
 
-    glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
-    glLightfv(GL_LIGHT2, GL_POSITION, light_position2);
-    glLightfv(GL_LIGHT3, GL_POSITION, light_position3);
-    glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, lightDir);
+    //glLightfv(GL_LIGHT1, GL_POSITION, light_position1);
+    //glLightfv(GL_LIGHT2, GL_POSITION, light_position2);
+    //glLightfv(GL_LIGHT3, GL_POSITION, light_position3);
+    //glLightfv(GL_LIGHT3, GL_SPOT_DIRECTION, lightDir);
 
     ObjectHandler::drawObjects();
 
