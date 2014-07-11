@@ -3,45 +3,27 @@
 
 // static member initialization
 bool SceneHandler::animate = false;
-bool SceneHandler::redLight = false;
-bool SceneHandler::violetLight = false;
-bool SceneHandler::wheatleyLight = false;
 
 float SceneHandler::rotationX = 0.0f;
 float SceneHandler::rotationY = 0.0f;
 
 void SceneHandler::setLightning()
 {
-    GLfloat light_color1[] = { 1.0f, 0.0f, 0.0f };
-    GLfloat light_color2[] = { 0.4f, 0.0f, 0.8f };
-    GLfloat light_color3[] = { 1.0f, 1.0f, 1.0f };
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
-    //glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT0);
     glEnable(GL_COLOR_MATERIAL);
-    
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, light_color1);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, light_color2);
-    glLightfv(GL_LIGHT3, GL_DIFFUSE, light_color3);
-
-    glLightf(GL_LIGHT3, GL_SPOT_CUTOFF, 40.0f);
-    glLightf(GL_LIGHT3, GL_SPOT_EXPONENT, 16.0f);
 }
 
 // adds objects into scene
 void SceneHandler::create()
 {
-    time_t timer = time(NULL);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHT0);
     cout << "Set scene name" << endl;
     //string name;
     //cin >> name;
     //load(name);
-    //setLightning();
+    setLightning();
+    time_t timer = time(NULL);
     ObjectHandler obj;
     SceneObject scene;
     scene.fileName = "Rayne.obj";

@@ -8,10 +8,6 @@
 class MiscHandler
 {
     private:
-        static GLfloat light_position1[];
-        static GLfloat light_position2[];
-        static GLfloat lightDir[];
-
         static void reshapeCallback(int width, int height);
         static void render();
 

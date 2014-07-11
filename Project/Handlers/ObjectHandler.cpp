@@ -5,11 +5,6 @@
 #include "..\IL\devil_cpp_wrapper.hpp"
 
 // static member initialization
-float ObjectHandler::rotYAnimate = 0.0f;
-float ObjectHandler::positionX = 0.0f;
-float ObjectHandler::redLightScale = 0.0f;
-float ObjectHandler::violetLightScale = 0.0f;
-bool ObjectHandler::goRight = true;
 vector<pair<int, ObjectProperties> > ObjectHandler::m_objectListId;
 
 ObjectProperties::ObjectProperties(SceneObject& object) : position(object.position), rotation(object.rotation), size(object.size),

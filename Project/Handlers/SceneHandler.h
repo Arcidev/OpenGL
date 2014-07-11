@@ -11,9 +11,6 @@ class SceneHandler
 
     public:
         static bool animate;
-        static bool redLight;
-        static bool violetLight;
-        static bool wheatleyLight;
         static float rotationX;
         static float rotationY;
 
