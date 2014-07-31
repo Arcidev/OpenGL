@@ -42,8 +42,12 @@ bool ObjLoader::Load(const char * filename)
     }
 
     vector<Triangle>* triangles = &m_mtlMap[MTL_NOT_DEFINED].triangles;
+    vector<Vector3f> vertices;
+    vector<Vector3f> normals;
+    vector<Vector2f> textures;
     Vector3f vec3;
     Vector2f vec2;
+    Vector3u values;
     Triangle triangle;
     char slash;
     string prefix;
@@ -57,22 +61,27 @@ bool ObjLoader::Load(const char * filename)
         {
             case VERTEX_POSITION:
                 file >> vec3.x >> vec3.y >> vec3.z;
-                m_vertices.push_back(vec3);
+                vertices.push_back(vec3);
                 break;
             case TEXTURE_POSITION:
                 file >> vec2.x >> vec2.y;
-                m_textures.push_back(vec2);
+                textures.push_back(vec2);
                 break;
             case NORMAL_POSITION:
                 file >> vec3.x >> vec3.y >> vec3.z;
-                m_normals.push_back(vec3);
+                normals.push_back(vec3);
                 break;
             case TRIANGLE_VALUE:
-                file >> triangle.v0 >> slash >> triangle.t0 >> slash >> triangle.n0;
-                file >> triangle.v1 >> slash >> triangle.t1 >> slash >> triangle.n1;
-                file >> triangle.v2 >> slash >> triangle.t2 >> slash >> triangle.n2;
-                DecrementIndices(triangle);
-                triangles->push_back(triangle);
+                for (uint i = 0; i < 3; i++)
+                {
+                    file >> values.x >> slash >> values.y >> slash >> values.z;
+
+                    triangle.setPosition(vertices[values.x - 1]);
+                    triangle.setTexture(textures[values.y - 1]);
+                    triangle.setNormal(normals[values.z - 1]);
+
+                    triangles->push_back(triangle);
+                }
                 break;
             case SET_MTL_LIB:
                 file >> str;
@@ -98,13 +107,6 @@ bool ObjLoader::Load(const char * filename)
 
     file.close();
     return true;
-}
-
-void ObjLoader::DecrementIndices(Triangle & triangle)
-{
-    triangle.v0--; triangle.t0--; triangle.n0--;
-    triangle.v1--; triangle.t1--; triangle.n1--;
-    triangle.v2--; triangle.t2--; triangle.n2--;
 }
 
 bool ObjLoader::LoadMtl(string name)
@@ -167,9 +169,6 @@ bool ObjLoader::LoadMtl(string name)
 
 void ObjLoader::PrintLog()
 {
-    cout << "Vertices: " << m_vertices.size() << endl;
-    cout << "Normals: " << m_normals.size() << endl;
-
     uint trianglesSize = 0;
     for (map<string, Mtl>::const_iterator itr = m_mtlMap.begin(); itr != m_mtlMap.end(); itr++)
         trianglesSize += itr->second.triangles.size();

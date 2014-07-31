@@ -17,11 +17,36 @@ struct Vector3f
     float x, y, z;
 };
 
+struct Vector3u
+{
+    uint x, y, z;
+};
+
 struct Triangle
 {
-    unsigned int v0, t0, n0;
-    unsigned int v1, t1, n1;
-    unsigned int v2, t2, n2;
+    float s, t;
+    float nx, ny, nz;
+    float vx, vy, vz;
+
+    void setTexture(Vector2f& tex)
+    {
+        s = tex.x;
+        t = tex.y;
+    }
+
+    void setNormal(Vector3f& normal)
+    {
+        nx = normal.x;
+        ny = normal.y;
+        nz = normal.z;
+    }
+
+    void setPosition(Vector3f& vertex)
+    {
+        vx = vertex.x;
+        vy = vertex.y;
+        vz = vertex.z;
+    }
 };
 
 struct SceneObject

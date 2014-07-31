@@ -66,9 +66,6 @@ void ObjectHandler::prepareObject(SceneObject object)
 
     DebugLog::writeLine("\tLoaded successfully");
 
-    vector<Vector2f> textures = obj.GetTextures();
-    vector<Vector3f> vertices = obj.GetVertices();
-    vector<Vector3f> normals = obj.GetNormals();
     MTLMap mtlMap = obj.GetMtlMap();
     Mtl const* mtl;
 
@@ -91,43 +88,10 @@ void ObjectHandler::prepareObject(SceneObject object)
         
         m_objectListId.push_back(make_pair(glGenLists(1), properties));
         glNewList(m_objectListId.back().first, GL_COMPILE);
-        //glColor3fv(object.color);
 
-        glBegin(GL_TRIANGLES);
-        for (uint i = 0; i < mtl->triangles.size(); i++)
-        {
-            if (texture && (mtl->triangles[i].t0 != -1))
-                glTexCoord2f(textures[mtl->triangles[i].t0].x,
-                textures[mtl->triangles[i].t0].y);
-            glNormal3f(normals[mtl->triangles[i].n0].x,
-                normals[mtl->triangles[i].n0].y,
-                normals[mtl->triangles[i].n0].z);
-            glVertex3f(vertices[mtl->triangles[i].v0].x,
-                vertices[mtl->triangles[i].v0].y,
-                vertices[mtl->triangles[i].v0].z);
+        glInterleavedArrays(GL_T2F_N3F_V3F, 0, &mtl->triangles[0]);
+        glDrawArrays(GL_TRIANGLES, 0, mtl->triangles.size());
 
-            if (texture && (mtl->triangles[i].t1 != -1))
-                glTexCoord2f(textures[mtl->triangles[i].t1].x,
-                textures[mtl->triangles[i].t1].y);
-            glNormal3f(normals[mtl->triangles[i].n1].x,
-                normals[mtl->triangles[i].n1].y,
-                normals[mtl->triangles[i].n1].z);
-            glVertex3f(vertices[mtl->triangles[i].v1].x,
-                vertices[mtl->triangles[i].v1].y,
-                vertices[mtl->triangles[i].v1].z);
-
-
-            if (texture && (mtl->triangles[i].t2 != -1))
-                glTexCoord2f(textures[mtl->triangles[i].t2].x,
-                textures[mtl->triangles[i].t2].y);
-            glNormal3f(normals[mtl->triangles[i].n2].x,
-                normals[mtl->triangles[i].n2].y,
-                normals[mtl->triangles[i].n2].z);
-            glVertex3f(vertices[mtl->triangles[i].v2].x,
-                vertices[mtl->triangles[i].v2].y,
-                vertices[mtl->triangles[i].v2].z);
-        }
-        glEnd();
         glEndList();
     }
 }
