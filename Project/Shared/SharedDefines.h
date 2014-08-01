@@ -56,5 +56,5 @@ struct SceneObject
 
     float color[3];
     float size;
-    bool animate;
+    bool animated;
 };

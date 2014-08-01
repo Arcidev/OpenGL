@@ -1,5 +1,6 @@
-#include "CameraHandler.h"
 #include <iostream>
+#include "CameraHandler.h"
+
 // static member initialization
 float CameraHandler::m_cameraX = 0.0f;
 float CameraHandler::m_cameraY = 5.0f;

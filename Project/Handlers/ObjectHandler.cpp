@@ -1,6 +1,7 @@
 #include "ObjectHandler.h"
 #include "MiscHandler.h"
 #include "DebugLog.h"
+
 #define IL_USE_PRAGMA_LIBS
 #include "..\IL\devil_cpp_wrapper.hpp"
 
@@ -8,7 +9,7 @@
 vector<pair<int, ObjectProperties> > ObjectHandler::m_objectListId;
 
 ObjectProperties::ObjectProperties(SceneObject& object) : position(object.position), rotation(object.rotation), size(object.size),
-                        animate(object.animate), textureID(0), originalTextureID(0) { }
+                        animate(object.animated), textureID(0), originalTextureID(0) { }
 
 ObjectHandler::ObjectHandler()
 {

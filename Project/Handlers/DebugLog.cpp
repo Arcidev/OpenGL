@@ -1,5 +1,5 @@
-#include "DebugLog.h"
 #include <iostream>
+#include "DebugLog.h"
 
 void DebugLog::write(const char* log)
 {
