@@ -6,7 +6,7 @@ class SceneHandler
     private:
         vector<SceneObject> m_scenery;
 
-        void setLightning();
+        void setLightning() const;
         void load(string sceneName);
 
     public:
@@ -16,6 +16,6 @@ class SceneHandler
 
         static void togglePolygonMode();
 
-        void create();
+        void create() const;
 };
 

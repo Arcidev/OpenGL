@@ -31,7 +31,7 @@ void MiscHandler::render()
     glutSwapBuffers();
 }
 
-void MiscHandler::registerCallbacks()
+void MiscHandler::registerCallbacks() const
 {
     glutDisplayFunc(render);
     glutIdleFunc(render);
@@ -40,7 +40,7 @@ void MiscHandler::registerCallbacks()
     glutSpecialFunc(KeybordHandler::specialPressed);
 }
 
-void MiscHandler::initializeWindow()
+void MiscHandler::initializeWindow() const
 {
     glutInitWindowPosition((glutGet(GLUT_SCREEN_WIDTH) - SIZE_X) / 2, (glutGet(GLUT_SCREEN_HEIGHT) - SIZE_Y) / 2);
     glutInitWindowSize(SIZE_X, SIZE_Y);

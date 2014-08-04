@@ -63,10 +63,11 @@ class ObjLoader
 
         ParserProperty GetParserProperty(string const& prop) const;
         bool LoadMtl(string fileName);
+
     public:
         ObjLoader();
-        bool Load(const char * filename);
-        MTLMap& GetMtlMap() { return m_mtlMap; }
+        bool Load(char const* filename);
+        MTLMap const& GetMtlMap() const { return m_mtlMap; }
 
-        void PrintLog();
+        void PrintLog() const;
 };

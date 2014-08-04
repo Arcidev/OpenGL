@@ -19,7 +19,7 @@ ObjectHandler::ObjectHandler()
 }
 
 // loads texture
-uint ObjectHandler::loadTexture(const wchar_t * filename)
+uint ObjectHandler::loadTexture(wchar_t const* filename) const
 {
     uint texId = 0;
 
@@ -67,7 +67,7 @@ void ObjectHandler::prepareObject(SceneObject object)
 
     DebugLog::writeLine("\tLoaded successfully");
 
-    MTLMap mtlMap = obj.GetMtlMap();
+    MTLMap const mtlMap = obj.GetMtlMap();
     Mtl const* mtl;
 
     for (MTLMap::const_iterator itr = mtlMap.begin(); itr != mtlMap.end(); itr++)

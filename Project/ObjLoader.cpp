@@ -32,7 +32,7 @@ ParserProperty ObjLoader::GetParserProperty(string const& prop) const
     return (iter == parserPropertyMap.end()) ? PROPERTY_NOT_DEFINED : iter->second;
 }
 
-bool ObjLoader::Load(const char * filename)
+bool ObjLoader::Load(char const* filename)
 {
     ifstream file(filename);
     if (!file.is_open())
@@ -167,7 +167,7 @@ bool ObjLoader::LoadMtl(string name)
     return true;
 }
 
-void ObjLoader::PrintLog()
+void ObjLoader::PrintLog() const
 {
     uint trianglesSize = 0;
     for (map<string, Mtl>::const_iterator itr = m_mtlMap.begin(); itr != m_mtlMap.end(); itr++)

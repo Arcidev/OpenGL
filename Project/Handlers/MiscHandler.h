@@ -12,6 +12,6 @@ class MiscHandler
         static void render();
 
     public:
-        void registerCallbacks();
-        void initializeWindow();
+        void registerCallbacks() const;
+        void initializeWindow() const;
 };

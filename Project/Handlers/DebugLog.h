@@ -3,7 +3,7 @@
 class DebugLog
 {
     public:
-        static void write(const char* log);
-        static void writeLine(const char* log);
-        static void writeLine(const wchar_t* log);
+        static void write(char const* log);
+        static void writeLine(char const* log);
+        static void writeLine(wchar_t const* log);
 };

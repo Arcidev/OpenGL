@@ -1,7 +1,7 @@
 #include <iostream>
 #include "DebugLog.h"
 
-void DebugLog::write(const char* log)
+void DebugLog::write(char const* log)
 {
     #if defined(_DEBUG)
 
@@ -10,7 +10,7 @@ void DebugLog::write(const char* log)
     #endif
 }
 
-void DebugLog::writeLine(const char* log)
+void DebugLog::writeLine(char const* log)
 {
     #if defined(_DEBUG)
 
@@ -19,7 +19,7 @@ void DebugLog::writeLine(const char* log)
     #endif
 }
 
-void DebugLog::writeLine(const wchar_t* log)
+void DebugLog::writeLine(wchar_t const* log)
 {
     #if defined(_DEBUG)
 

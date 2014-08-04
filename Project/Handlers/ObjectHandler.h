@@ -18,9 +18,9 @@ class ObjectHandler
     private:
         static vector<pair<int, ObjectProperties> > m_objectListId;
 
-        uint loadTexture(const wchar_t * filename);
+        uint loadTexture(wchar_t const* filename) const;
         static inline void setObjectPosition(ObjectProperties& prop);
-        static void setSize(float& size) { glScalef(size, size, size); }
+        static void setSize(float const& size) { glScalef(size, size, size); }
     public:
         ObjectHandler();
         static void drawObjects();

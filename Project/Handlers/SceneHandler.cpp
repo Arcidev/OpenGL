@@ -7,7 +7,7 @@ bool SceneHandler::animate = false;
 float SceneHandler::rotationX = 0.0f;
 float SceneHandler::rotationY = 0.0f;
 
-void SceneHandler::setLightning()
+void SceneHandler::setLightning() const
 {
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
@@ -16,7 +16,7 @@ void SceneHandler::setLightning()
 }
 
 // adds objects into scene
-void SceneHandler::create()
+void SceneHandler::create() const
 {
     cout << "Set scene name" << endl;
     //string name;
