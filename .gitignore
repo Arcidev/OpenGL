@@ -1,5 +1,7 @@
 #Ignore files build by Visual Studio
 *.suo
 *.sdf
+*.opensdf
 [Dd]ebug*/
 [Rr]elease*/
+[Ii]pch*/
